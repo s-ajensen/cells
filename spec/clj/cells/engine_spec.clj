@@ -41,4 +41,17 @@
                     {:kind :blah}]}]
         (should= {:x 0 :y 1}
           (-> (sut/next-state state) :entities first :transform))
-        (should= {:kind :blah} (-> (sut/next-state state) :entities second))))))
+        (should= {:kind :blah} (-> (sut/next-state state) :entities second)))))
+
+  (context "scripts"
+
+    (it "self, next-state"
+
+      (let [state {:entities
+                   [{:kind :blah
+                     :scripts
+                     [{:kind :self
+                       :next-state
+                       #(assoc % :foo :bar)}]}]}]
+        (should= :bar
+          (-> (sut/next-state state) :entities first :foo))))))

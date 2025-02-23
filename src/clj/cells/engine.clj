@@ -15,10 +15,18 @@
 (defn update-transforms [state]
   (update state :entities (partial map update-transform)))
 
+(defn update-script [{:keys [scripts] :as entity}]
+  (if scripts
+    (reduce (fn [e s] ((:next-state s) e)) entity scripts)
+    entity))
+
+(defn update-scripts [state]
+  (update state :entities (partial map update-script)))
+
 (defn next-state [state]
   (-> state
       update-transforms
-      ))
+      update-scripts))
 
 (deftype CellEngine [window]
   GameEngine
