@@ -17,7 +17,6 @@
              :dev- {:main-opts ["-m" "cells.dev" "cljs" "css"]}
              :repl {:main-opts ["-e" "(require,'cells.repl)" "-e" "(in-ns,'cells.repl)" "--repl"] :extra-paths ["dev"]}
              :run  {:main-opts ["-m" "cells.main"]}
-             :spec {:jvm-opts  ["-XstartOnFirstThread"]
-                    :main-opts ["-m" "speclj.main" "-c"]}
+             :spec {:main-opts ["-m" "speclj.main" "-c"]}
              }
  }
