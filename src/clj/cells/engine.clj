@@ -1,11 +1,9 @@
 (ns cells.engine
   (:require [cask.core :as cask]
-            [cells.module.script]
-            [cells.module.transform]
+            [cells.middleware.script :refer [->ScriptMiddleware]]
+            [cells.middleware.transform :refer [->TransformMiddleware]]
             [cells.render :as r]
-            [clojure2d.core :as c2d])
-  (:import (cells.module.script ScriptMiddleware)
-           (cells.module.transform TransformMiddleware)))
+            [clojure2d.core :as c2d]))
 
 (def w 800)
 (def h 600)
@@ -20,8 +18,8 @@
     (if-not (c2d/window-active? window)
       (System/exit 0)
       (reduce (fn [state middleware] (cask/next-state middleware state)) state
-              [(TransformMiddleware.)
-               (ScriptMiddleware.)])))
+              [(->TransformMiddleware)
+               (->ScriptMiddleware)])))
   cask/Renderable
   (render [this state]
     (let [canvas (c2d/canvas w h)]

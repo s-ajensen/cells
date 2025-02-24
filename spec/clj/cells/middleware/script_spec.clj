@@ -1,6 +1,6 @@
-(ns cells.module.script-spec
+(ns cells.middleware.script-spec
   (:require [cask.core :as cask]
-            [cells.module.script :as sut]
+            [cells.middleware.script :as sut]
             [speclj.core :refer :all]))
 
 (def middleware (sut/->ScriptMiddleware))

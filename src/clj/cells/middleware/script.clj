@@ -1,4 +1,4 @@
-(ns cells.module.script
+(ns cells.middleware.script
   (:require [cask.core :as cask]))
 
 (defn update-script [{:keys [scripts] :as entity}]

@@ -1,6 +1,6 @@
-(ns cells.module.transform-spec
+(ns cells.middleware.transform-spec
   (:require [cask.core :as cask]
-            [cells.module.transform :as sut]
+            [cells.middleware.transform :as sut]
             [speclj.core :refer :all]))
 
 (def middleware (sut/->TransformMiddleware))

@@ -1,4 +1,4 @@
-(ns cells.module.transform
+(ns cells.middleware.transform
   (:require [cask.core :as cask]))
 
 (defn update-transform [{:keys [transform velocity] :as entity}]
