@@ -1,6 +1,7 @@
 (ns cells.main
   (:require [cask.core :as cask]
             [cells.engine :as engine]
+            [cells.render :as render]
             [clojure2d.core :as c2d])
   (:import (cells.engine CellEngine)))
 
@@ -13,4 +14,5 @@
                }))
 
 (defn -main [& args]
-  (cask/game-loop (CellEngine. window) 17))
+  (cask/game-loop (CellEngine. (render/->C2DWindow window)) 17)
+  (System/exit 0))

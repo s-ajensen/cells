@@ -1,5 +1,6 @@
 (ns cells.render
-  (:require [clojure2d.core :as c2d]))
+  (:require [clojure2d.core :as c2d]
+            [cells.window :as window]))
 
 (def origin {:x 0 :y 0})
 (def default-color {:r 254 :g 0 :b 220 :a 255})
@@ -20,3 +21,14 @@
                      (c2d/set-background :white)
                      (c2d/translate 400 300)
                      (render state)))
+
+(deftype C2DWindow [window]
+  window/Window
+  (render [_this state]
+    (let [canvas (c2d/get-canvas window)]
+      (c2d/with-canvas-> canvas
+                         (render-state state))
+      (c2d/replace-canvas window canvas)
+      (c2d/repaint window)))
+  (window-close? [this]
+    (not (c2d/window-active? window))))

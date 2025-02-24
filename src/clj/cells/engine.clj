@@ -3,8 +3,8 @@
             [cask.core :as cask]
             [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.transform :refer [->TransformMiddleware]]
-            [cells.render :as r]
-            [clojure2d.core :as c2d]))
+            [cells.middleware.event :refer [->EventMiddleware]]
+            [cells.window :as window]))
 
 (def w 800)
 (def h 600)
@@ -18,15 +18,10 @@
                  :transform {:x 0 :y 0}
                  :velocity  {:x 1 :y 1}}}})
   (next-state [_this state]
-    (if-not (c2d/window-active? window)
-      (System/exit 0)
-      (reduce (fn [state middleware] (cask/next-state middleware state)) state
-              [(->TransformMiddleware)
-               (->ScriptMiddleware)])))
+    (reduce (fn [state middleware] (cask/next-state middleware state)) state
+            [(->TransformMiddleware)
+             (->ScriptMiddleware)
+             (->EventMiddleware window)]))
   cask/Renderable
   (render [_this state]
-    (let [canvas (c2d/canvas w h)]
-      (c2d/with-canvas-> canvas
-                         (r/render-state state))
-      (c2d/replace-canvas window canvas)
-      (c2d/repaint window))))
+    (window/render window state)))
