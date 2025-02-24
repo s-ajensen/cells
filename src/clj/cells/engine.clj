@@ -1,43 +1,28 @@
 (ns cells.engine
-  (:require [c3kit.apron.corec :as ccc]
-            [cask.core]
+  (:require [cask.core :as cask]
+            [cells.module.script]
+            [cells.module.transform]
             [cells.render :as r]
             [clojure2d.core :as c2d])
-  (:import (cask.core GameEngine)))
+  (:import (cells.module.script ScriptMiddleware)
+           (cells.module.transform TransformMiddleware)))
 
 (def w 800)
 (def h 600)
 
-(defn update-transform [{:keys [transform velocity] :as entity}]
-  (cond-> entity
-          transform (update :transform #(merge-with + % velocity))))
-
-(defn update-transforms [state]
-  (update state :entities (partial map update-transform)))
-
-(defn update-script [{:keys [scripts] :as entity}]
-  (if scripts
-    (reduce (fn [e s] ((:next-state s) e)) entity scripts)
-    entity))
-
-(defn update-scripts [state]
-  (update state :entities (partial map update-script)))
-
-(defn next-state [state]
-  (-> state
-      update-transforms
-      update-scripts))
-
 (deftype CellEngine [window]
-  GameEngine
+  cask/Steppable
   (setup [this]
     {:tick 1 :entities [{:kind      :cell
                          :transform {:x 0 :y 0}
                          :velocity  {:x 1 :y 1}}]})
-  (nextState [this state]
+  (next-state [this state]
     (if-not (c2d/window-active? window)
       (System/exit 0)
-      (next-state state)))
+      (reduce (fn [state middleware] (cask/next-state middleware state)) state
+              [(TransformMiddleware.)
+               (ScriptMiddleware.)])))
+  cask/Renderable
   (render [this state]
     (let [canvas (c2d/canvas w h)]
       (c2d/with-canvas-> canvas
