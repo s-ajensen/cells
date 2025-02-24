@@ -1,12 +1,14 @@
 (ns cells.middleware.script
   (:require [cask.core :as cask]))
 
-(defn update-script [{:keys [scripts] :as entity}]
-  (if scripts
-    (reduce (fn [e s] ((:next-state s) e)) entity scripts)
-    entity))
+(defn apply-scripts [state [id {:keys [scripts] :as entity}]]
+  (reduce (fn [state {:keys [scope next-state]}]
+            (case scope
+              :self (assoc-in state [:entities id] (next-state entity))
+              :* (next-state state)))
+          state scripts))
 
 (deftype ScriptMiddleware []
   cask/Steppable
-  (next-state [this state]
-    (update state :entities #(update-vals % update-script))))
+  (next-state [_this {:keys [entities] :as state}]
+    (reduce apply-scripts state entities)))

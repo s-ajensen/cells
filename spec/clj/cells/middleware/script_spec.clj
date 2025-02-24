@@ -19,20 +19,20 @@
                         [{:scope :self
                           :next-state
                           #(assoc % :foo :bar)}
-                         {:kind :self
+                         {:scope :self
                           :next-state
                           #(assoc %1 :foo :bar)}]}}}]
         (should= :bar
           (-> (cask/next-state middleware state) :entities (get id) :foo)))))
 
-  #_(focus-context "world"
+  (context "*"
 
-      (it "next-state"
-        (let [state {:entities
-                     [{:kind :blah
-                       :scripts
-                       [{:scope :*
-                         :next-state
-                         #(assoc % :foo :bar)}]}]}]
-          (should= :bar
-            (-> (cask/next-state middleware state) :foo))))))
+    (it "next-state"
+      (let [state {:entities
+                   {id {:kind :blah
+                        :scripts
+                        [{:scope :*
+                          :next-state
+                          #(assoc % :foo :bar)}]}}}]
+        (should= :bar
+          (-> (cask/next-state middleware state) :foo))))))

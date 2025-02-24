@@ -11,20 +11,20 @@
 
 (deftype CellEngine [window]
   cask/Steppable
-  (setup [this]
+  (setup [_this]
     {:tick 1
      :entities {(ccc/new-uuid)
                 {:kind      :cell
                  :transform {:x 0 :y 0}
                  :velocity  {:x 1 :y 1}}}})
-  (next-state [this state]
+  (next-state [_this state]
     (if-not (c2d/window-active? window)
       (System/exit 0)
       (reduce (fn [state middleware] (cask/next-state middleware state)) state
               [(->TransformMiddleware)
                (->ScriptMiddleware)])))
   cask/Renderable
-  (render [this state]
+  (render [_this state]
     (let [canvas (c2d/canvas w h)]
       (c2d/with-canvas-> canvas
                          (r/render-state state))
