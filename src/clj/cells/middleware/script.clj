@@ -9,4 +9,4 @@
 (deftype ScriptMiddleware []
   cask/Steppable
   (next-state [this state]
-    (update state :entities (partial map update-script))))
+    (update state :entities #(update-vals % update-script))))

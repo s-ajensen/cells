@@ -13,7 +13,7 @@
     (c2d/ellipse canvas x y radius radius)))
 
 (defn render [canvas {:keys [entities]}]
-  (run! (partial render-cell canvas) entities))
+  (run! (partial render-cell canvas) (vals entities)))
 
 (defn render-state [canvas state]
   (c2d/with-canvas-> canvas
