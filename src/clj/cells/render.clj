@@ -25,7 +25,7 @@
 (deftype C2DWindow [window]
   window/Window
   (render [_this state]
-    (let [canvas (c2d/get-canvas window)]
+    (let [canvas (c2d/canvas (:w window) (:h window)) #_(c2d/get-canvas window)]
       (c2d/with-canvas-> canvas
                          (render-state state))
       (c2d/replace-canvas window canvas)
