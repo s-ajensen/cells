@@ -28,11 +28,12 @@
   (context "*"
 
     (it "next-state"
-      (let [state {:entities
-                   {id {:kind :blah
-                        :scripts
-                        [{:scope :*
-                          :next-state
-                          #(assoc % :foo :bar)}]}}}]
-        (should= :bar
-          (-> (cask/next-state middleware state) :foo))))))
+      (let [entity {:kind :blah
+                    :scripts
+                    [{:scope :*
+                      :next-state
+                      #(-> (assoc %1 :foo :bar)
+                           (assoc :bar %2))}]}
+            state {:entities {id entity}}]
+        (should= :bar (-> (cask/next-state middleware state) :foo))
+        (should= entity (-> (cask/next-state middleware state) :bar))))))

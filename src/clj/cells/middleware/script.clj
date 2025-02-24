@@ -5,7 +5,7 @@
   (reduce (fn [state {:keys [scope next-state]}]
             (case scope
               :self (assoc-in state [:entities id] (next-state entity))
-              :* (next-state state)))
+              :* (next-state state entity)))
           state scripts))
 
 (deftype ScriptMiddleware []
