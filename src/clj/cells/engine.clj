@@ -38,8 +38,8 @@
                         (fn [state _]
                           (let [id (ccc/new-uuid)
                                 entity {:kind      :cell
-                                        :transform {:x (- 250 (rand-int 800))
-                                                    :y (- 250 (rand-int 800))}
+                                        :transform {:x (- 400 (rand-int 800))
+                                                    :y (- 400 (rand-int 800))}
                                         :color {:r (rand-int 255)
                                                 :g (rand-int 255)
                                                 :b (rand-int 255)
