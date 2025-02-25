@@ -21,3 +21,8 @@
   cask/Steppable
   (next-state [_this {:keys [event-queue] :as state}]
     (reduce trigger-event state event-queue)))
+
+(defn enqueue-event [state event]
+  (if-not (:event-queue state)
+    (assoc state :event-queue [event])
+    (update state :event-queue conj event)))

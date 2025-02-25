@@ -34,6 +34,13 @@
 (describe "Event Middleware"
   (with-stubs)
 
+  (context "enqueue-event"
+    (it "nil event-queue"
+      (should= {:event-queue [:event]} (sut/enqueue-event nil :event)))
+
+    (it "multiple event-queue"
+      (should= {:event-queue [:event :other-event]} (-> (sut/enqueue-event nil :event) (sut/enqueue-event :other-event)))))
+
   (it "invokes listener when event is triggered"
     (should= (inc (:counter state))
              (:counter (cask/next-state (sut/->EventMiddleware) (with-events state [:my-event])))))
