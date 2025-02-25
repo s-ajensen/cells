@@ -5,7 +5,7 @@
 
 (def uuid (atom 0))
 
-(focus-describe "Entity"
+(describe "Entity"
   (with-stubs)
   (before (reset! uuid 0))
 

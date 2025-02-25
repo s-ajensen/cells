@@ -31,4 +31,6 @@
       (c2d/replace-canvas window canvas)
       (c2d/repaint window)))
   (window-close? [this]
-    (not (c2d/window-active? window))))
+    (not (c2d/window-active? window)))
+  (left-click? [this]
+    (c2d/mouse-pressed? window)))

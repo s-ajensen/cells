@@ -2,4 +2,5 @@
 
 (defprotocol Window
   (render [this state])
-  (window-close? [this]))
+  (window-close? [this])
+  (left-click? [this]))
