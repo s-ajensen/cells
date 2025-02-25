@@ -1,22 +1,19 @@
 (ns cells.render-spec
-  (:require [c3kit.apron.corec :as ccc]
+  (:require [cells.entity :as entity]
             [cells.render :as sut]
             [clojure2d.core :as c2d]
             [speclj.core :refer :all]))
 
 (def state
-  (let [id-1 (ccc/new-uuid)
-        id-2 (ccc/new-uuid)
-        id-3 (ccc/new-uuid)
-        id-4 (ccc/new-uuid)]
-    {:kind     :state
-     :entities {id-1 {:kind :cell}
-                id-2 {:kind      :cell
-                      :transform {:x 10 :y 10}}
-                id-3 {:kind  :cell
-                      :color {:r 255 :g 255 :b 255 :a 255}}
-                id-4 {:kind   :cell
-                      :radius 10}}}))
+  {:kind     :state
+   :entities (-> {}
+                 (entity/add-entity {:kind :cell})
+                 (entity/add-entity {:kind      :cell
+                                     :transform {:x 10 :y 10}})
+                 (entity/add-entity {:kind  :cell
+                                     :color {:r 255 :g 255 :b 255 :a 255}})
+                 (entity/add-entity {:kind   :cell
+                                     :radius 10}))})
 
 (describe "Cells simulation renderer"
 
