@@ -59,7 +59,7 @@
                         :scope      :self
                         :next-state #(do (prn "right") %)}]}))})
   (next-state [_this state]
-    ; TODO - use cask/Steppable's `setup` fn.
+    ; TODO - use cask/Steppable's `setup` fn with the middleware.
     ;; (CellEngine's setup should just be a `reduce` of the middleware setups)
     (reduce (fn [state middleware] (cask/next-state middleware state)) state
             [(->ScriptMiddleware)
