@@ -25,7 +25,7 @@
 (deftype C2DWindow [window]
   window/Window
   (render [_this state]
-    (let [canvas (c2d/canvas (:w window) (:h window)) #_(c2d/get-canvas window)]
+    (let [canvas (c2d/canvas (:w window) (:h window))]
       (c2d/with-canvas-> canvas
                          (render-state state))
       (c2d/replace-canvas window canvas)
@@ -33,6 +33,8 @@
   (window-close? [this]
     (not (c2d/window-active? window)))
   (left-click? [this]
-    (= :left (c2d/mouse-button window)))
+    (and (c2d/mouse-pressed? window)
+         (= :left (c2d/mouse-button window))))
   (right-click? [this]
-    (= :right (c2d/mouse-button window))))
+    (and (c2d/mouse-pressed? window)
+         (= :right (c2d/mouse-button window)))))
