@@ -1,5 +1,6 @@
 (ns cells.render
   (:require [cask.core :as cask]
+            [cells.engine :as engine]
             [clojure2d.core :as c2d]
             [cells.middleware.event-poll :as poll]))
 
@@ -36,13 +37,16 @@
 ;; whose state is
 (def events (atom []))
 
-(defmethod c2d/mouse-event ["Game Window" :mouse-pressed] [event state]
-  (swap! events conj {:type :mouse-pressed :button (.getButton event)})
-  state)
-
 (deftype C2DPoller [window]
   poll/Pollable
   (poll-events [this state]
+    (if-not (c2d/window-active? window)
+      (swap! events conj :window-close))
     (let [polled-events @events]
       (reset! events [])
       polled-events)))
+
+(defn init! [window]
+  (defmethod c2d/mouse-event [(:window-name window) :mouse-pressed] [event state]
+    (swap! events conj {:type :mouse-pressed :button (.getButton event)})
+    state))

@@ -14,7 +14,7 @@
       (assoc-in [:velocity :x] (* 2 (Math/cos (* 0.1 tick))))
       (assoc-in [:velocity :y] (* 2 (Math/sin (* 0.1 tick))))))
 
-(deftype CellEngine [renderable pollable]
+(deftype CellEngine [window]
   cask/Steppable
   (setup [_this]
     {:tick     1
@@ -62,8 +62,8 @@
     (reduce (fn [state middleware] (cask/next-state middleware state)) state
             [(->TransformMiddleware)
              (->ScriptMiddleware)
-             (->EventPollMiddleware pollable)
+             (->EventPollMiddleware (:event-poller window))
              (->EventMiddleware)]))
   cask/Renderable
   (render [_this state]
-    (cask/render renderable state)))
+    (cask/render (:renderer window) state)))

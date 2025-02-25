@@ -14,6 +14,9 @@
                }))
 
 (defn -main [& args]
-  (let [engine (CellEngine. (render/->C2DRenderer window) (render/->C2DPoller window))]
+  (render/init! window)
+  (let [window {:renderer (render/->C2DRenderer window)
+                :event-poller (render/->C2DPoller window)}
+        engine (CellEngine. window)]
     (cask/game-loop engine 17)
     (System/exit 0)))
