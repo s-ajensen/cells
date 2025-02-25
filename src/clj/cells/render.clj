@@ -34,7 +34,7 @@
       (c2d/repaint window))))
 
 ;; [GMJ] we use atoms here since c2d only supports simultaneous events via multimethods
-;; whose state is
+;; whose state can't be known outside of the scope of the window without atoms (I think)
 (def events (atom []))
 
 (deftype C2DPoller [window]
