@@ -29,7 +29,6 @@
                         :next-state spin}]})
                    (entity/add-entity
                      {:kind    :spawner
-                      :render? false
                       :scripts
                       [{:scope :*
                         :next-state
@@ -50,7 +49,6 @@
                             (update state :entities entity/add-entity entity)))}]})
                    (entity/add-entity
                      {:kind      :headless-listener
-                      :render?   false
                       :listeners
                       [{:event      :window-close
                         :scope      :*
