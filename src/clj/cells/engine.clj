@@ -4,7 +4,8 @@
             [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.transform :refer [->TransformMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
-            [cells.window :as window]))
+            [cells.window :as window]
+            [cells.entity :as entity]))
 
 (def w 800)
 (def h 600)
@@ -14,16 +15,12 @@
       (assoc-in [:velocity :x] (* 2 (Math/cos (* 0.1 tick))))
       (assoc-in [:velocity :y] (* 2 (Math/sin (* 0.1 tick))))))
 
-(defn add-entity [entities spec]
-  (let [id (ccc/new-uuid)]
-    (assoc entities id (assoc spec :id id))))
-
 (deftype CellEngine [window]
   cask/Steppable
   (setup [_this]
     {:tick     1
      :entities (-> {}
-                   (add-entity
+                   (entity/add-entity
                      {:kind      :cell
                       :transform {:x 0 :y 0}
                       :velocity  {:x 1 :y 1}
@@ -31,7 +28,7 @@
                       :scripts
                       [{:scope      :self
                         :next-state spin}]})
-                   (add-entity
+                   (entity/add-entity
                      {:kind  :spawner
                       :color {:a 0}
                       :scripts
