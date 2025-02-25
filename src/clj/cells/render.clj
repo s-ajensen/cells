@@ -1,6 +1,7 @@
 (ns cells.render
-  (:require [clojure2d.core :as c2d]
-            [cells.window :as window]))
+  (:require [cask.core :as cask]
+            [clojure2d.core :as c2d]
+            [cells.middleware.event-poll :as poll]))
 
 (def origin {:x 0 :y 0})
 (def default-color {:r 254 :g 0 :b 220 :a 255})
@@ -22,19 +23,26 @@
                      (c2d/translate 400 300)
                      (render state)))
 
-(deftype C2DWindow [window]
-  window/Window
+(deftype C2DRenderer [window]
+  cask/Renderable
   (render [_this state]
     (let [canvas (c2d/canvas (:w window) (:h window))]
       (c2d/with-canvas-> canvas
                          (render-state state))
       (c2d/replace-canvas window canvas)
-      (c2d/repaint window)))
-  (window-close? [this]
-    (not (c2d/window-active? window)))
-  (left-click? [this]
-    (and (c2d/mouse-pressed? window)
-         (= :left (c2d/mouse-button window))))
-  (right-click? [this]
-    (and (c2d/mouse-pressed? window)
-         (= :right (c2d/mouse-button window)))))
+      (c2d/repaint window))))
+
+;; [GMJ] we use atoms here since c2d only supports simultaneous events via multimethods
+;; whose state is
+(def events (atom []))
+
+(defmethod c2d/mouse-event ["Game Window" :mouse-pressed] [event state]
+  (swap! events conj {:type :mouse-pressed :button (.getButton event)})
+  state)
+
+(deftype C2DPoller [window]
+  poll/Pollable
+  (poll-events [this state]
+    (let [polled-events @events]
+      (reset! events [])
+      polled-events)))

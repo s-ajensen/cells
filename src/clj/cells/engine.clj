@@ -4,7 +4,6 @@
             [cells.middleware.transform :refer [->TransformMiddleware]]
             [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
-            [cells.window :as window]
             [cells.entity :as entity]))
 
 (def w 800)
@@ -15,7 +14,7 @@
       (assoc-in [:velocity :x] (* 2 (Math/cos (* 0.1 tick))))
       (assoc-in [:velocity :y] (* 2 (Math/sin (* 0.1 tick))))))
 
-(deftype CellEngine [window]
+(deftype CellEngine [renderable pollable]
   cask/Steppable
   (setup [_this]
     {:tick     1
@@ -53,18 +52,18 @@
                       [{:event      :window-close
                         :scope      :*
                         :next-state (constantly :halt)}
-                       {:event      :left-click
+                       {:event      {:type :mouse-pressed :button 1}
                         :scope      :self
                         :next-state #(do (prn "left") %)}
-                       {:event      :right-click
+                       {:event      {:type :mouse-pressed :button 3}
                         :scope      :self
                         :next-state #(do (prn "right") %)}]}))})
   (next-state [_this state]
     (reduce (fn [state middleware] (cask/next-state middleware state)) state
             [(->TransformMiddleware)
              (->ScriptMiddleware)
-             (->EventPollMiddleware window)
+             (->EventPollMiddleware pollable)
              (->EventMiddleware)]))
   cask/Renderable
   (render [_this state]
-    (window/render window state)))
+    (cask/render renderable state)))
