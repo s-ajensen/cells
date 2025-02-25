@@ -36,8 +36,7 @@
                       [{:scope :*
                         :next-state
                         (fn [state _]
-                          (let [id (ccc/new-uuid)
-                                entity {:kind      :cell
+                          (let [entity {:kind      :cell
                                         :transform {:x (- 400 (rand-int 800))
                                                     :y (- 400 (rand-int 800))}
                                         :color {:r (rand-int 255)
@@ -48,7 +47,7 @@
                                         :scripts
                                         [{:scope      :self
                                           :next-state spin}]}]
-                            (update state :entities assoc id entity)))}]})
+                            (update state :entities entity/add-entity entity)))}]})
                    (entity/add-entity
                      {:kind      :headless-listener
                       :listeners
