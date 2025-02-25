@@ -10,7 +10,7 @@
                :window-name "Game Window"
                :w           engine/w
                :h           engine/h
-               :refresher   :onrepaint
+               ;:refresher   :onrepaint
                }))
 
 (defn -main [& args]

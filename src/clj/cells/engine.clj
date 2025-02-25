@@ -3,6 +3,7 @@
             [cask.core :as cask]
             [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.transform :refer [->TransformMiddleware]]
+            [cells.middleware.window :refer [->WindowMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
             [cells.window :as window]
             [cells.entity :as entity]))
@@ -47,11 +48,18 @@
                                         :scripts
                                         [{:scope      :self
                                           :next-state spin}]}]
-                            (update state :entities assoc id entity)))}]}))})
+                            (update state :entities assoc id entity)))}]})
+                   (entity/add-entity
+                     {:kind      :halter
+                      :listeners
+                      [{:event      :window-close
+                        :scope      :*
+                        :next-state (constantly :halt)}]}))})
   (next-state [_this state]
     (reduce (fn [state middleware] (cask/next-state middleware state)) state
             [(->TransformMiddleware)
              (->ScriptMiddleware)
+             (->WindowMiddleware window)
              (->EventMiddleware)]))
   cask/Renderable
   (render [_this state]
