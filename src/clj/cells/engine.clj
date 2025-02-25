@@ -52,7 +52,7 @@
     (reduce (fn [state middleware] (cask/next-state middleware state)) state
             [(->TransformMiddleware)
              (->ScriptMiddleware)
-             (->EventMiddleware window)]))
+             (->EventMiddleware)]))
   cask/Renderable
   (render [_this state]
     (window/render window state)))

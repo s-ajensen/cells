@@ -1,19 +1,23 @@
 (ns cells.middleware.event
   (:require [cask.core :as cask]
-            [cells.window :as window]))
+            [cells.middleware.script :as script]))
 
-(defn maybe-close-window [{:keys [event-queue] :as state}]
-  (if (= :window-close (first event-queue))
-    :halt
-    state))
+(defn apply-listeners [event state [_id {:keys [listeners] :as entity}]]
+  (script/apply-scripts state (filter #(= event (:event %)) listeners) entity))
 
-(defn poll-window-events [state window]
-  (if (window/window-close? window)
-    (update state :event-queue conj :window-close)
-    state))
+(defn- maybe-halt [state]
+  (if (= :halt state)
+    :halt))
 
-(deftype EventMiddleware [window]
+(defn- halt-or-dequeue [state]
+  (or (maybe-halt state) (update state :event-queue rest)))
+
+(defn trigger-event [{:keys [entities] :as state} event]
+  (let [apply-listeners (partial apply-listeners event)]
+    (-> (reduce apply-listeners state entities)
+        (halt-or-dequeue))))
+
+(deftype EventMiddleware []
   cask/Steppable
-  (next-state [this state]
-    (-> (poll-window-events state window)
-        (maybe-close-window))))
+  (next-state [_this {:keys [event-queue] :as state}]
+    (reduce trigger-event state event-queue)))
