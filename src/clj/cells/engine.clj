@@ -1,9 +1,8 @@
 (ns cells.engine
-  (:require [c3kit.apron.corec :as ccc]
-            [cask.core :as cask]
+  (:require [cask.core :as cask]
             [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.transform :refer [->TransformMiddleware]]
-            [cells.middleware.window :refer [->WindowMiddleware]]
+            [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
             [cells.window :as window]
             [cells.entity :as entity]))
@@ -64,7 +63,7 @@
     (reduce (fn [state middleware] (cask/next-state middleware state)) state
             [(->TransformMiddleware)
              (->ScriptMiddleware)
-             (->WindowMiddleware window)
+             (->EventPollMiddleware window)
              (->EventMiddleware)]))
   cask/Renderable
   (render [_this state]
