@@ -1,7 +1,6 @@
 (ns cells.engine
   (:require [cask.core :as cask]
             [cells.middleware.script :refer [->ScriptMiddleware]]
-            [cells.middleware.transform :refer [->TransformMiddleware]]
             [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
             [cells.entity :as entity]))
@@ -61,8 +60,7 @@
                         :next-state #(do (prn "right") %)}]}))})
   (next-state [_this state]
     (reduce (fn [state middleware] (cask/next-state middleware state)) state
-            [(->TransformMiddleware)
-             (->ScriptMiddleware)
+            [(->ScriptMiddleware)
              (->EventPollMiddleware (:event-poller window))
              (->EventMiddleware)]))
   cask/Renderable
