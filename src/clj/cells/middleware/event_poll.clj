@@ -3,9 +3,9 @@
             [cells.middleware.event :as event]))
 
 (defprotocol Pollable
-  (poll-events [this]))
+  (poll-events [this state]))
 
 (deftype EventPollMiddleware [pollable]
   cask/Steppable
   (next-state [_this state]
-    (reduce event/enqueue-event state (poll-events pollable))))
+    (reduce event/enqueue-event state (poll-events pollable state))))

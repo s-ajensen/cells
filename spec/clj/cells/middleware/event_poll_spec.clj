@@ -6,19 +6,23 @@
 
 (deftype NoEvents []
   sut/Pollable
-  (poll-events [this] []))
+  (poll-events [this state] []))
 
 (deftype OneEvent []
   sut/Pollable
-  (poll-events [this] [:my-event]))
+  (poll-events [this state] [:my-event]))
 
 (deftype OtherEvent []
   sut/Pollable
-  (poll-events [this] [:other-event]))
+  (poll-events [this state] [:other-event]))
 
 (deftype MultipleEvents []
   sut/Pollable
-  (poll-events [this] [:my-event :other-event]))
+  (poll-events [this state] [:my-event :other-event]))
+
+(deftype StateEvents []
+  sut/Pollable
+  (poll-events [this state] (if (= (:custom-state state) 1) [:my-event] [])))
 
 (describe "Event Polling Middleware"
 
@@ -35,4 +39,12 @@
 
   (it "enqueues multiple events"
     (should= (-> (event/enqueue-event {} :my-event) (event/enqueue-event :other-event))
-             (cask/next-state (sut/->EventPollMiddleware (->MultipleEvents)) {}))))
+             (cask/next-state (sut/->EventPollMiddleware (->MultipleEvents)) {})))
+
+  (context "polls events based on state"
+    (it "default state"
+      (should= {} (cask/next-state (sut/->EventPollMiddleware (->StateEvents)) {})))
+
+    (it "custom state"
+      (let [custom-state {:custom-state 1}]
+        (should= (event/enqueue-event custom-state :my-event) (cask/next-state (sut/->EventPollMiddleware (->StateEvents)) custom-state))))))
