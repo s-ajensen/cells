@@ -50,11 +50,17 @@
                                           :next-state spin}]}]
                             (update state :entities assoc id entity)))}]})
                    (entity/add-entity
-                     {:kind      :halter
+                     {:kind      :headless-listener
                       :listeners
                       [{:event      :window-close
                         :scope      :*
-                        :next-state (constantly :halt)}]}))})
+                        :next-state (constantly :halt)}
+                       {:event      :left-click
+                        :scope      :self
+                        :next-state #(do (prn "left") %)}
+                       {:event      :right-click
+                        :scope      :self
+                        :next-state #(do (prn "right") %)}]}))})
   (next-state [_this state]
     (reduce (fn [state middleware] (cask/next-state middleware state)) state
             [(->TransformMiddleware)

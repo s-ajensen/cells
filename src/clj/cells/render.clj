@@ -33,4 +33,6 @@
   (window-close? [this]
     (not (c2d/window-active? window)))
   (left-click? [this]
-    (c2d/mouse-pressed? window)))
+    (= :left (c2d/mouse-button window)))
+  (right-click? [this]
+    (= :right (c2d/mouse-button window))))

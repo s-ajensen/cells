@@ -4,7 +4,8 @@
             [cells.window :as window]))
 
 (def events {window/window-close? :window-close
-             window/left-click?   :left-click})
+             window/left-click?   :left-click
+             window/right-click?  :right-click})
 
 (defn maybe-enqueue-event [window state [event-fn event]]
   (if (event-fn window)
