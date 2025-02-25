@@ -21,20 +21,22 @@
      :entities (-> {}
                    (entity/add-entity
                      {:kind      :cell
+                      :render?   true
                       :transform {:x 0 :y 0}
-                      :velocity  {:x 1 :y 1}
                       :tick      0
                       :scripts
                       [{:scope      :self
                         :next-state spin}]})
                    (entity/add-entity
-                     {:kind  :spawner
-                      :color {:a 0}
+                     {:kind    :spawner
+                      :render? false
                       :scripts
                       [{:scope :*
                         :next-state
                         (fn [state _]
+                          state
                           (let [entity {:kind      :cell
+                                        :render?   true
                                         :transform {:x (- 400 (rand-int 800))
                                                     :y (- 400 (rand-int 800))}
                                         :color {:r (rand-int 255)
@@ -48,6 +50,7 @@
                             (update state :entities entity/add-entity entity)))}]})
                    (entity/add-entity
                      {:kind      :headless-listener
+                      :render?   false
                       :listeners
                       [{:event      :window-close
                         :scope      :*

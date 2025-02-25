@@ -16,7 +16,7 @@
     (c2d/ellipse canvas x y radius radius)))
 
 (defn render [canvas {:keys [entities]}]
-  (run! (partial render-cell canvas) (vals entities)))
+  (run! (partial render-cell canvas) (filter :render? (vals entities))))
 
 (defn render-state [canvas state]
   (c2d/with-canvas-> canvas
