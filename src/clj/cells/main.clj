@@ -15,4 +15,5 @@
 
 (defn -main [& args]
   (let [engine (CellEngine. (render/->C2DRenderer window) (render/->C2DPoller window))]
-    (cask/game-loop engine 17)))
+    (cask/game-loop engine 17)
+    (System/exit 0)))
