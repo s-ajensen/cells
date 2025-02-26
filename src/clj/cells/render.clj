@@ -42,7 +42,7 @@
   poll/Pollable
   (poll-events [this state]
     (if-not (c2d/window-active? window)
-      (swap! events conj :window-close))
+      (swap! events conj {:type :window-close}))
     (let [polled-events @events]
       (reset! events [])
       polled-events)))
