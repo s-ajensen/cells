@@ -4,7 +4,9 @@
             [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
-            [cells.entity :as entity]))
+            [cells.entity :as entity]
+            [cells.button :as button]
+            [cells.trigger :as trigger]))
 
 (def w 800)
 (def h 600)
@@ -14,28 +16,17 @@
       (assoc-in [:velocity :x] (* 2 (Math/cos (* 0.1 tick))))
       (assoc-in [:velocity :y] (* 2 (Math/sin (* 0.1 tick))))))
 
-(defn trigger-left-click? [state self event]
-  (and (= (:type event) :mouse-pressed)
-       (= (:button event) 1)))
-
-(defn trigger-right-click? [state self event]
-  (and (= (:type event) :mouse-pressed)
-       (= (:button event) 3)))
-
-(defn trigger-window-close? [state self event]
-  (= (:type event) :window-close))
-
 (def base-listeners
   {:kind :headless-listener
    :listeners
    [{:scope      :*
-     :trigger    trigger-window-close?
+     :trigger    trigger/global-window-close?
      :next-state (constantly :halt)}
     {:scope      :*
-     :trigger    trigger-left-click?
+     :trigger    trigger/global-left-click?
      :next-state (fn [state self event] (do (prn "left") state))}
     {:scope      :*
-     :trigger    trigger-right-click?
+     :trigger    trigger/global-right-click?
      :next-state (fn [state self event] (do (prn "right") state))}]})
 
 (def orbs-state
@@ -71,26 +62,6 @@
                               :next-state spin}]}]
                 (update state :entities entity/add-entity entity)))}]}))})
 
-(defn point-in-transform? [{:keys [x y] :as point} transform]
-  (let [tx (:x (:position transform))
-        ty (:y (:position transform))
-        tw (:x (:size transform))
-        th (:y (:size transform))]
-    (and (<= x (+ tx tw))
-         (>= x tx)
-         (<= y (+ ty th))
-         (>= y ty))))
-
-(defn call-if-event-in-transform [f state self event]
-  (if (point-in-transform? (:position event) (:transform self))
-    (f state self event)
-    state))
-
-(defn button-clicked-listener [callback]
-  {:scope      :*
-   :trigger    trigger-left-click?
-   :next-state (partial call-if-event-in-transform callback)})
-
 (deftype CellEngine [window]
   cask/Steppable
   (setup [_this]
@@ -103,7 +74,7 @@
             :kind      :button
             :render?   true
             :transform {:position {:x 0 :y 0} :size {:x 50 :y 50}}
-            :listeners [(button-clicked-listener (constantly orbs-state))]}))})
+            :listeners [(button/global-listener (constantly orbs-state))]}))})
   (next-state [_this state]
     ; TODO - use cask/Steppable's `setup` fn with the middleware.
     ;; (CellEngine's setup should just be a `reduce` of the middleware setups)
