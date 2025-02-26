@@ -1,6 +1,7 @@
 (ns cells.render-spec
   (:require [cells.entity :as entity]
             [cells.render :as sut]
+            [cells.spec-helper :as spec-helper]
             [clojure2d.core :as c2d]
             [speclj.core :refer :all]))
 
@@ -11,7 +12,7 @@
                                      :render? true})
                  (entity/add-entity {:kind      :cell
                                      :render?   true
-                                     :transform {:position {:x 10 :y 10}}})
+                                     :transform (spec-helper/position 10 10)})
                  (entity/add-entity {:kind    :cell
                                      :render? true
                                      :color   {:r 255 :g 255 :b 255 :a 255}})
@@ -26,10 +27,10 @@
                                      :render? true})
                  (entity/add-entity {:kind      :button
                                      :render?   true
-                                     :transform {:position {:x 10 :y 10}}})
+                                     :transform (spec-helper/position 10 10)})
                  (entity/add-entity {:kind      :button
                                      :render?   true
-                                     :transform {:size {:x 50 :y 50}}})
+                                     :transform (spec-helper/size 50 50)})
                  (entity/add-entity {:kind    :cell
                                      :render? true
                                      :color   {:r 255 :g 255 :b 255 :a 255}}))})

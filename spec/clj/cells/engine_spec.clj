@@ -1,6 +1,7 @@
 (ns cells.engine-spec
   (:require [c3kit.apron.corec :as ccc]
             [cells.middleware.event-poll :as poll]
+            [cells.spec-helper :as spec-helper]
             [speclj.core :refer :all]
             [cask.core :as cask]
             [cells.engine :as sut])
@@ -42,7 +43,7 @@
         (should button)
         (should= :button (:kind button))
         (should (:render? button))
-        (should= {:position {:x 0 :y 0} :size {:x 50 :y 50}}
+        (should= (spec-helper/transform 0 0 50 50)
                  (:transform button))
         (should= {:r 0 :g 0 :b 0 :a 255}
                  (:color button))))
