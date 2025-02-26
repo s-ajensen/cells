@@ -15,6 +15,7 @@
     (c2d/set-color canvas r g b a)
     (c2d/ellipse canvas x y radius radius)))
 
+;; TODO - be able to render buttons
 (defn render [canvas {:keys [entities]}]
   (run! (partial render-cell canvas) (filter :render? (vals entities))))
 
@@ -48,5 +49,8 @@
 
 (defn init! [window]
   (defmethod c2d/mouse-event [(:window-name window) :mouse-pressed] [event state]
-    (swap! events conj {:type :mouse-pressed :button (.getButton event)})
+    (let [position (c2d/mouse-pos window)]
+      (swap! events conj {:type :mouse-pressed
+                          :button (.getButton event)
+                          :position {:x (.-x position) :y (.-y position)}}))
     state))
