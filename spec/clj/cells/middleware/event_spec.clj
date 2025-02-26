@@ -10,17 +10,17 @@
 (defn global-double [state _self]
   (update state :counter #(* 2 %)))
 
-(def inc-listener {:event :my-event
+(def inc-listener {:trigger #(= % :my-event)
                    :scope :*
                    :next-state global-inc})
 
-(def double-listener {:event :other-event
+(def double-listener {:trigger #(= % :other-event)
                       :scope :*
                       :next-state global-double})
 
-(def halt-listener {:event :halt-event
-                      :scope :*
-                      :next-state (constantly :halt)})
+(def halt-listener {:trigger #(= % :halt-event)
+                    :scope :*
+                    :next-state (constantly :halt)})
 
 (def state {:counter 0 :event-queue [] :entities (-> {} (entity/add-entity {:listeners [inc-listener]}))})
 

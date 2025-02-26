@@ -3,7 +3,7 @@
             [cells.middleware.script :as script]))
 
 (defn apply-listeners [event state [_id {:keys [listeners] :as entity}]]
-  (script/apply-scripts state (filter #(= event (:event %)) listeners) entity))
+  (script/apply-scripts state (filter #((:trigger %) event) listeners) entity))
 
 (defn- maybe-halt [state]
   (if (= :halt state)
