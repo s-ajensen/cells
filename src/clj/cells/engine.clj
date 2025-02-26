@@ -50,8 +50,8 @@
             (fn [state _]
               (let [entity {:kind      :cell
                             :render?   true
-                            :transform {:x (- 400 (rand-int 800))
-                                        :y (- 400 (rand-int 800))}
+                            :transform {:x (rand-int w)
+                                        :y (rand-int h)}
                             :color     {:r (rand-int 255)
                                         :g (rand-int 255)
                                         :b (rand-int 255)
@@ -74,6 +74,7 @@
             :kind      :button
             :render?   true
             :transform {:position {:x 0 :y 0} :size {:x 50 :y 50}}
+            :color     {:r 0 :g 0 :b 0 :a 255}
             :listeners [(button/global-listener (constantly orbs-state))]}))})
   (next-state [_this state]
     ; TODO - use cask/Steppable's `setup` fn with the middleware.

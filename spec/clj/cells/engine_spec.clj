@@ -43,7 +43,9 @@
         (should= :button (:kind button))
         (should (:render? button))
         (should= {:position {:x 0 :y 0} :size {:x 50 :y 50}}
-                 (:transform button))))
+                 (:transform button))
+        (should= {:r 0 :g 0 :b 0 :a 255}
+                 (:color button))))
 
     (it "sets orbs state when clicked"
       (should= sut/orbs-state
