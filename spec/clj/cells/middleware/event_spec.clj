@@ -4,23 +4,30 @@
             [cells.middleware.event :as sut]
             [speclj.core :refer :all]))
 
-(defn global-inc [state _self]
+(defn global-inc [state self event]
   (update state :counter inc))
 
-(defn global-double [state _self]
+(defn local-inc [self event]
+  (update self :counter inc))
+
+(defn global-double [state self event]
   (update state :counter #(* 2 %)))
 
-(def inc-listener {:trigger #(= % :my-event)
-                   :scope :*
+(def inc-listener {:scope :*
+                   :trigger (fn [state self event] (= event :my-event))
                    :next-state global-inc})
 
-(def double-listener {:trigger #(= % :other-event)
-                      :scope :*
+(def double-listener {:scope :*
+                      :trigger (fn [state self event] (= event :other-event))
                       :next-state global-double})
 
-(def halt-listener {:trigger #(= % :halt-event)
-                    :scope :*
+(def halt-listener {:scope :*
+                    :trigger (fn [state self event] (= event :halt-event))
                     :next-state (constantly :halt)})
+
+(def local-listener {:scope :self
+                     :trigger (fn [self event] (= event :my-event))
+                     :next-state local-inc})
 
 (def state {:counter 0 :event-queue [] :entities (-> {} (entity/add-entity {:listeners [inc-listener]}))})
 
@@ -87,4 +94,11 @@
       (should= :halt (cask/next-state (sut/->EventMiddleware) state))))
 
   (it "halt persists through halt"
-    (should= :halt (cask/next-state (sut/->EventMiddleware) :halt))))
+    (should= :halt (cask/next-state (sut/->EventMiddleware) :halt)))
+
+  (it "invokes local listener"
+    (let [state (->state [{:counter 0 :listeners [local-listener]}] [:my-event])
+          [_ entity]     (first (:entities state))
+          [_ new-entity] (first (:entities (cask/next-state (sut/->EventMiddleware) state)))]
+      (should= (update entity :counter inc)
+               new-entity))))

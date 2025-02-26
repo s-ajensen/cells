@@ -2,8 +2,22 @@
   (:require [cask.core :as cask]
             [cells.middleware.script :as script]))
 
-(defn apply-listeners [event state [_id {:keys [listeners] :as entity}]]
-  (script/apply-scripts state (filter #((:trigger %) event) listeners) entity))
+(defn triggered? [state entity event {:keys [trigger scope] :as listener}]
+  (case scope
+    :self (trigger entity event)
+    :* (trigger state entity event)))
+
+;; TODO - refactor with script/apply-scripts
+(defn apply-listeners
+  ([event state [_id {:keys [listeners] :as entity}]]
+   (apply-listeners event state listeners entity))
+  ([event state listeners {:keys [id] :as entity}]
+   (let [triggered? #(triggered? state entity event %)]
+     (reduce (fn [state {:keys [scope next-state]}]
+               (case scope
+                 :self (assoc-in state [:entities id] (next-state entity event))
+                 :* (next-state state entity event)))
+             state (filter triggered? listeners)))))
 
 (defn- maybe-halt [state]
   (if (= :halt state)
