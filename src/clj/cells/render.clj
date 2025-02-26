@@ -14,7 +14,7 @@
 (defmethod render-entity :default [_canvas _entity])
 
 (defmethod render-entity :cell [canvas {:keys [transform color radius] :as cell}]
-  (let [{:keys [x y]} (merge origin transform)
+  (let [{:keys [x y]} (merge origin (:position transform))
         {:keys [r g b a]} (merge default-color color)
         radius (or radius default-radius)]
     (c2d/set-color canvas r g b a)

@@ -11,7 +11,7 @@
                                      :render? true})
                  (entity/add-entity {:kind      :cell
                                      :render?   true
-                                     :transform {:x 10 :y 10}})
+                                     :transform {:position {:x 10 :y 10}}})
                  (entity/add-entity {:kind    :cell
                                      :render? true
                                      :color   {:r 255 :g 255 :b 255 :a 255}})

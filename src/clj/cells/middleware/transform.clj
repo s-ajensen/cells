@@ -2,8 +2,9 @@
   (:require [cask.core :as cask]))
 
 (defn update-transform [{:keys [transform velocity] :as entity}]
-  (cond-> entity
-          transform (update :transform #(merge-with + % velocity))))
+  (let [position (:position transform)]
+    (cond-> entity
+            position (update-in [:transform :position] #(merge-with + % velocity)))))
 
 (deftype TransformMiddleware []
   cask/Steppable

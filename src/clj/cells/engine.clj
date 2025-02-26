@@ -37,7 +37,7 @@
        (entity/add-entity
          {:kind      :cell
           :render?   true
-          :transform {:x 0 :y 0}
+          :transform {:position {:x 0 :y 0}}
           :tick      0
           :scripts
           [{:scope      :self
@@ -50,8 +50,9 @@
             (fn [state _]
               (let [entity {:kind      :cell
                             :render?   true
-                            :transform {:x (rand-int w)
-                                        :y (rand-int h)}
+                            :transform {:position
+                                        {:x (rand-int w)
+                                         :y (rand-int h)}}
                             :color     {:r (rand-int 255)
                                         :g (rand-int 255)
                                         :b (rand-int 255)
@@ -70,7 +71,7 @@
      (-> {}
          (entity/add-entity base-listeners)
          (entity/add-entity
-           {:label      "orb-button"
+           {:label     "orb-button"
             :kind      :button
             :render?   true
             :transform {:position {:x 0 :y 0} :size {:x 50 :y 50}}
