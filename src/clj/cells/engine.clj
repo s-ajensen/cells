@@ -1,5 +1,6 @@
 (ns cells.engine
   (:require [cask.core :as cask]
+            [cells.middleware.transform :refer [->TransformMiddleware]]
             [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
@@ -16,8 +17,7 @@
 (deftype CellEngine [window]
   cask/Steppable
   (setup [_this]
-    {:tick     1
-     :entities (-> {}
+    {:entities (-> {}
                    (entity/add-entity
                      {:kind      :cell
                       :render?   true
@@ -32,7 +32,6 @@
                       [{:scope :*
                         :next-state
                         (fn [state _]
-                          state
                           (let [entity {:kind      :cell
                                         :render?   true
                                         :transform {:x (- 400 (rand-int 800))
@@ -62,7 +61,8 @@
     ; TODO - use cask/Steppable's `setup` fn with the middleware.
     ;; (CellEngine's setup should just be a `reduce` of the middleware setups)
     (reduce (fn [state middleware] (cask/next-state middleware state)) state
-            [(->ScriptMiddleware)
+            [(->TransformMiddleware)
+             (->ScriptMiddleware)
              (->EventPollMiddleware (:event-poller window))
              (->EventMiddleware)]))
   cask/Renderable
