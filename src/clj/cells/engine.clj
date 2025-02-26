@@ -17,7 +17,8 @@
       (assoc-in [:velocity :y] (* 2 (Math/sin (* 0.1 tick))))))
 
 (def base-listeners
-  {:kind :headless-listener
+  {:kind  :headless-listener
+   :label "base-listeners"
    :listeners
    [{:scope      :*
      :trigger    trigger/global-window-close?
