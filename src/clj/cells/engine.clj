@@ -4,7 +4,7 @@
             [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
-            [cells.state.button :as button]
+            [cells.entity.button :as button]
             [cells.state.window :as window]
             [cells.state.orbs :as orbs]))
 

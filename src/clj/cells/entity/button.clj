@@ -1,4 +1,4 @@
-(ns cells.state.button
+(ns cells.entity.button
   (:require [cells.state.entity :as entity]
             [cells.trigger :as trigger]))
 
