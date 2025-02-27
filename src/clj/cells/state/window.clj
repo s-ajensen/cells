@@ -2,6 +2,9 @@
   (:require [cells.entity :as entity]
             [cells.trigger :as trigger]))
 
+(def w 800)
+(def h 600)
+
 (def listener
   {:kind  :headless-listener
    :label "base-listeners"

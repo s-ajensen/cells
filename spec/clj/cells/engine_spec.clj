@@ -1,9 +1,17 @@
 (ns cells.engine-spec
   (:require [cells.spec-helper :as h]
+            [cells.state.orbs :as orbs]
+            [cells.state.window :as window]
             [speclj.core :refer :all]
             [cells.engine :as sut]))
 
 (describe "Cells engine"
+  (with-stubs)
+
+  (redefs-around [prn (stub :prn)])
+
+  (it "has window listeners"
+    (should= window/listener (dissoc (h/find-entity h/state "base-listeners") :id)))
 
   (context "orb button"
 
@@ -18,7 +26,7 @@
                  (:color button))))
 
     (it "sets orbs state when clicked"
-      (should= sut/orbs-state
+      (should= orbs/state
                (-> h/state
                    (h/->next [{:type :mouse-pressed :button 1 :position {:x 25 :y 25}}]))))
 
