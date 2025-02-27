@@ -1,5 +1,5 @@
 (ns cells.render-spec
-  (:require [cells.entity :as entity]
+  (:require [cells.state.entity :as entity]
             [cells.render :as sut]
             [cells.spec-helper :as spec-helper]
             [clojure2d.core :as c2d]
