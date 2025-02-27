@@ -1,5 +1,6 @@
-(ns cells.button
-  (:require [cells.trigger :as trigger]))
+(ns cells.state.button
+  (:require [cells.entity :as entity]
+            [cells.trigger :as trigger]))
 
 (defn point-in-transform? [{:keys [x y] :as point} transform]
   (let [tx (:x (:position transform))
@@ -16,7 +17,16 @@
     (f state self event)
     state))
 
-(defn global-listener [callback]
+(defn global-listener [global-callback]
   {:scope      :*
    :trigger    trigger/global-left-click?
-   :next-state (partial call-if-event-in-transform callback)})
+   :next-state (partial call-if-event-in-transform global-callback)})
+
+(defn add [state {:keys [label transform color global-callback] :as button}]
+  (entity/add-entity state
+    {:label     label
+     :kind      :button
+     :render?   true
+     :transform transform
+     :color     color
+     :listeners [(global-listener global-callback)]}))
