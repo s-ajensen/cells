@@ -19,5 +19,5 @@
      :trigger    trigger/global-right-click?
      :next-state (fn [state self event] (prn "right") state)}]})
 
-(defn add-entities [entities]
+(defn add-listeners [entities]
   (entity/add-entity entities listener))

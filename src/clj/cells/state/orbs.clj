@@ -11,7 +11,7 @@
   {:event-queue []
    :entities
    (-> {}
-       (window/add-entities)
+       (window/add-listeners)
        (entity/add-entity
          {:kind      :cell
           :render?   true

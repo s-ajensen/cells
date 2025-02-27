@@ -4,7 +4,6 @@
             [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
-            [cells.entity :as entity]
             [cells.state.button :as button]
             [cells.state.window :as window]
             [cells.state.orbs :as orbs]))
@@ -21,7 +20,7 @@
     {:event-queue []
      :entities
      (-> {}
-         (window/add-entities)
+         (window/add-listeners)
          (button/add orb-button))})
   (next-state [_this state]
     ; TODO - use cask/Steppable's `setup` fn with the middleware.

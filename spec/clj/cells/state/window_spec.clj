@@ -4,7 +4,7 @@
             [speclj.core :refer :all]))
 
 (def state {:event-queue []
-            :entities (sut/add-entities {})})
+            :entities (sut/add-listeners {})})
 
 (describe "window state"
   (with-stubs)
