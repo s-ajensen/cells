@@ -1,0 +1,20 @@
+(ns cells.state.window
+  (:require [cells.entity :as entity]
+            [cells.trigger :as trigger]))
+
+(def listener
+  {:kind  :headless-listener
+   :label "base-listeners"
+   :listeners
+   [{:scope      :*
+     :trigger    trigger/global-window-close?
+     :next-state (constantly :halt)}
+    {:scope      :*
+     :trigger    trigger/global-left-click?
+     :next-state (fn [state self event] (prn "left") state)}
+    {:scope      :*
+     :trigger    trigger/global-right-click?
+     :next-state (fn [state self event] (prn "right") state)}]})
+
+(defn add-entities [entities]
+  (entity/add-entity entities listener))

@@ -6,7 +6,7 @@
             [cells.middleware.event :refer [->EventMiddleware]]
             [cells.entity :as entity]
             [cells.button :as button]
-            [cells.trigger :as trigger]))
+            [cells.state.window :as window]))
 
 (def w 800)
 (def h 600)
@@ -16,25 +16,11 @@
       (assoc-in [:velocity :x] (* 2 (Math/cos (* 0.1 tick))))
       (assoc-in [:velocity :y] (* 2 (Math/sin (* 0.1 tick))))))
 
-(def base-listeners
-  {:kind  :headless-listener
-   :label "base-listeners"
-   :listeners
-   [{:scope      :*
-     :trigger    trigger/global-window-close?
-     :next-state (constantly :halt)}
-    {:scope      :*
-     :trigger    trigger/global-left-click?
-     :next-state (fn [state self event] (do (prn "left") state))}
-    {:scope      :*
-     :trigger    trigger/global-right-click?
-     :next-state (fn [state self event] (do (prn "right") state))}]})
-
 (def orbs-state
   {:event-queue []
    :entities
    (-> {}
-       (entity/add-entity base-listeners)
+       (window/add-entities)
        (entity/add-entity
          {:kind      :cell
           :render?   true
@@ -70,7 +56,7 @@
     {:event-queue []
      :entities
      (-> {}
-         (entity/add-entity base-listeners)
+         (window/add-entities)
          (entity/add-entity
            {:label     "orb-button"
             :kind      :button

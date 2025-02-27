@@ -1,5 +1,10 @@
 (ns cells.spec-helper
-  (:require [clojure.test :refer :all]))
+  (:require [c3kit.apron.corec :as ccc]
+            [cask.core :as cask]
+            [cells.engine]
+            [cells.middleware.event-poll :as poll]
+            [speclj.core :refer :all])
+  (:import (cells.engine CellEngine)))
 
 (defn position [x y]
   {:position {:x x :y y}})
@@ -13,3 +18,30 @@
           (size w h)))
   ([x y]
    (position x y)))
+
+(deftype WindowRenderer []
+  cask/Renderable
+  (render [_this _state]
+    ((stub :render))))
+
+(deftype WindowPoller [events]
+  poll/Pollable
+  (poll-events [_this _state]
+    events))
+
+(defn ->window [window-events]
+  {:renderer (->WindowRenderer)
+   :event-poller (->WindowPoller window-events)})
+
+(defn ->engine [window-events]
+  (CellEngine. (->window window-events)))
+
+(def state (cask/setup (->engine [])))
+
+(defn ->next
+  ([state] (->next state []))
+  ([state window-events]
+   (cask/next-state (->engine window-events) state)))
+
+(defn find-entity [state label]
+  (ccc/ffilter #(= label (:label %)) (vals (:entities state))))
