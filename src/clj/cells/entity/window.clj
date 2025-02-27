@@ -1,4 +1,4 @@
-(ns cells.state.window
+(ns cells.entity.window
   (:require [cells.state.entity :as entity]
             [cells.trigger :as trigger]))
 

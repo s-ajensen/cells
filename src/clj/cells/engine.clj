@@ -5,7 +5,7 @@
             [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
             [cells.entity.button :as button]
-            [cells.state.window :as window]
+            [cells.entity.window :as window]
             [cells.state.orbs :as orbs]))
 
 (def orb-button

@@ -1,7 +1,7 @@
 (ns cells.engine-spec
   (:require [cells.spec-helper :as h]
             [cells.state.orbs :as orbs]
-            [cells.state.window :as window]
+            [cells.entity.window :as window]
             [speclj.core :refer :all]
             [cells.engine :as sut]))
 

@@ -1,6 +1,6 @@
 (ns cells.state.orbs
   (:require [cells.state.entity :as entity]
-            [cells.state.window :as window]))
+            [cells.entity.window :as window]))
 
 (defn spin [{:keys [tick] :as e}]
   (-> (update e :tick inc)

@@ -1,5 +1,5 @@
-(ns cells.state.window-spec
-  (:require [cells.state.window :as sut]
+(ns cells.entity.window-spec
+  (:require [cells.entity.window :as sut]
             [cells.spec-helper :as h]
             [speclj.core :refer :all]))
 
