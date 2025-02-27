@@ -1,6 +1,6 @@
-(ns cells.state.entity-spec
+(ns cells.entity.core-spec
   (:require [c3kit.apron.corec :as ccc]
-            [cells.state.entity :as sut]
+            [cells.entity.core :as sut]
             [speclj.core :refer :all]))
 
 (def uuid (atom 0))

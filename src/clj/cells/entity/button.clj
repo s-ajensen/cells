@@ -1,5 +1,5 @@
 (ns cells.entity.button
-  (:require [cells.state.entity :as entity]
+  (:require [cells.entity.core :as entity]
             [cells.trigger :as trigger]))
 
 (defn point-in-transform? [{:keys [x y] :as point} transform]

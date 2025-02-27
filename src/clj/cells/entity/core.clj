@@ -1,4 +1,4 @@
-(ns cells.state.entity
+(ns cells.entity.core
   (:require [c3kit.apron.corec :as ccc]))
 
 (defn add-entity [entities spec]

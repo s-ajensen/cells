@@ -1,6 +1,6 @@
 (ns cells.middleware.event-spec
   (:require [cask.core :as cask]
-            [cells.state.entity :as entity]
+            [cells.entity.core :as entity]
             [cells.middleware.event :as sut]
             [speclj.core :refer :all]))
 

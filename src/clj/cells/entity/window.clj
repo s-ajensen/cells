@@ -1,5 +1,5 @@
 (ns cells.entity.window
-  (:require [cells.state.entity :as entity]
+  (:require [cells.entity.core :as entity]
             [cells.trigger :as trigger]))
 
 (def w 800)
