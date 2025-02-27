@@ -4,24 +4,11 @@
             [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
-            [cells.entity.button :as button]
-            [cells.entity.window :as window]
-            [cells.state.orbs :as orbs]))
-
-(def orb-button
-  {:label           "orb-button"
-   :transform       {:position {:x 0 :y 0} :size {:x 50 :y 50}}
-   :color           {:r 0 :g 0 :b 0 :a 255}
-   :global-callback (constantly orbs/state)})
+            [cells.state.main-menu :as main-menu]))
 
 (deftype CellEngine [window]
   cask/Steppable
-  (setup [_this]
-    {:event-queue []
-     :entities
-     (-> {}
-         (window/add-listeners)
-         (button/add orb-button))})
+  (setup [_this] main-menu/state)
   (next-state [_this state]
     ; TODO - use cask/Steppable's `setup` fn with the middleware.
     ;; (CellEngine's setup should just be a `reduce` of the middleware setups)

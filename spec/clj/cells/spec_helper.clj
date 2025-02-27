@@ -33,10 +33,11 @@
   {:renderer (->WindowRenderer)
    :event-poller (->WindowPoller window-events)})
 
-(defn ->engine [window-events]
-  (CellEngine. (->window window-events)))
-
-(def state (cask/setup (->engine [])))
+(defn ->engine
+  ([]
+   (->engine []))
+  ([window-events]
+  (CellEngine. (->window window-events))))
 
 (defn ->next
   ([state] (->next state []))
