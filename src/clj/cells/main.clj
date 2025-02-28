@@ -1,7 +1,7 @@
 (ns cells.main
   (:require [cask.core :as cask]
             [cells.render :as render]
-            [cells.state.window :as window]
+            [cells.entity.window :as window]
             [clojure2d.core :as c2d])
   (:import (cells.engine CellEngine)))
 
