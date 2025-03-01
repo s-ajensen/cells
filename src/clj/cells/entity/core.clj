@@ -1,6 +1,10 @@
 (ns cells.entity.core
   (:require [c3kit.apron.corec :as ccc]))
 
-(defn add-entity [entities spec]
+(defn ->entity [spec]
   (let [id (ccc/new-uuid)]
-    (assoc entities id (assoc spec :id id))))
+    (assoc spec :id id)))
+
+(defn add-entity [entities spec]
+  (let [{:keys [id] :as entity} (->entity spec)]
+    (assoc entities id entity)))

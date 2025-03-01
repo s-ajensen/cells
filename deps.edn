@@ -1,11 +1,12 @@
 {
  :paths     ["src/clj" "src/cljc" "resources"]
  :mvn/repos {"maven_central" {:url "https://repo.maven.apache.org/maven2/"}}
- :deps      {org.joml/joml               {:mvn/version "1.10.6"}
-             cask/cask                   {:git/url "git@github.com:s-ajensen/cask-engine.git" :git/sha "afef761abdb8328bf9f0fc3325bbb8572ef01551"}
-             com.cleancoders.c3kit/apron {:mvn/version "2.1.5"}
-             org.clojure/clojure         {:mvn/version "1.11.1"}
-             clojure2d/clojure2d         {:mvn/version "1.4.5"}}
+ :deps      {org.joml/joml                  {:mvn/version "1.10.6"}
+             cask/cask                      {:git/url "git@github.com:s-ajensen/cask-engine.git" :git/sha "afef761abdb8328bf9f0fc3325bbb8572ef01551"}
+             com.cleancoders.c3kit/apron    {:mvn/version "2.1.5"}
+             org.clojure/clojure            {:mvn/version "1.11.1"}
+             org.clojure/math.combinatorics {:mvn/version "0.3.0"}
+             clojure2d/clojure2d            {:mvn/version "1.4.5"}}
  :aliases   {
              :test {:extra-deps  {
                                   speclj/speclj {:mvn/version "3.4.5"}
