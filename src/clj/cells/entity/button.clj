@@ -22,8 +22,8 @@
    :trigger    trigger/global-left-click?
    :next-state (partial call-if-event-in-transform global-callback)})
 
-(defn add [state {:keys [label transform color global-callback] :as button}]
-  (entity/add-entity state
+(defn add [entities {:keys [label transform color global-callback] :as button}]
+  (entity/add-entity entities
     {:label     label
      :kind      :button
      :render?   true
