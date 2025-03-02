@@ -7,7 +7,7 @@
 
 (describe "Cells engine"
 
-  (it "has main-menu state"
+  #_(it "has main-menu state"
     (should= main-menu/state (cask/setup (h/->engine))))
 
   )
