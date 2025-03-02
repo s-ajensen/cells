@@ -15,12 +15,12 @@
       (let [{attracted-id :id :as attracted}
             (e/->entity
               {:kind      :cell
-               :transform {:x 10 :y 0}
+               :transform {:position {:x 10 :y 0}}
                :color     red})
             {static-id :id :as static}
             (e/->entity
               {:kind      :cell
-               :transform {:x 0.0 :y 0.0}
+               :transform {:position {:x 0.0 :y 0.0}}
                :color     green})
             spec {:attractions
                   {[green red] (fn [_attractor _attracted] 1)}}
@@ -30,6 +30,6 @@
             result (-> (sut/->AttractMiddleware spec)
                        (cask/next-state state)
                        :entities)]
-        (should= {:x 9.0 :y 0.0} (:transform (get result attracted-id)))
+        (should= {:x 9.0 :y 0.0} (-> (get result attracted-id) :transform :position))
         (should= static (get result static-id))
         ))))

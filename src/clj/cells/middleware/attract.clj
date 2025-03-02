@@ -19,7 +19,7 @@
 
 (defn- attract [{:keys [attractions]} attractor attracted]
   (let [attraction (get attractions [(:color attractor) (:color attracted)] (fn [_ _] 0))
-        dir (norm (sub (:transform attractor) (:transform attracted)))]
+        dir (norm (sub (:position (:transform attractor)) (:position (:transform attracted))))]
     (scale dir (attraction attractor attracted))))
 
 (defn- attract-entities [spec entities]
@@ -32,7 +32,7 @@
     (reduce-kv
       (fn [entities id deltas]
         (let [delta (reduce add deltas)]
-          (update-in entities [id :transform] add delta)))
+          (update-in entities [id :transform :position] add delta)))
       entities deltas)))
 
 (deftype AttractMiddleware [spec]
