@@ -2,8 +2,18 @@
   (:require [cells.entity.window :as window]
             [cells.spec-helper :as h]
             [cells.state.orbs :as orbs]
+            [cells.middleware.transform :refer [->TransformMiddleware]]
+            [cells.middleware.script :refer [->ScriptMiddleware]]
+            [cells.middleware.event-poll :refer [->EventPollMiddleware]]
+            [cells.middleware.event :refer [->EventMiddleware]]
             [speclj.core :refer :all]
             [cells.state.main-menu :as sut]))
+
+(defn ->next [state events]
+  (h/->next state events [(->TransformMiddleware)
+                          (->ScriptMiddleware)
+                          (->EventPollMiddleware (h/->WindowPoller events))
+                          (->EventMiddleware)]))
 
 (describe "Main Menu State"
   (with-stubs)
@@ -28,13 +38,13 @@
     (it "sets orbs state when clicked"
       (should= orbs/state
                (-> sut/state
-                   (h/->next [{:type :mouse-pressed :button 1 :position {:x 25 :y 25}}]))))
+                   (->next [{:type :mouse-pressed :button 1 :position {:x 25 :y 25}}]))))
 
     (it "does nothing state when not clicked"
       (let [valid-event {:type :mouse-pressed :button 1 :position {:x 25 :y 25}}]
-        (should= sut/state (-> sut/state (h/->next [(assoc valid-event :button 3)])))
-        (should= sut/state (-> sut/state (h/->next [(assoc valid-event :type :mouse-dragged)])))
-        (should= sut/state (-> sut/state (h/->next [(assoc valid-event :position {:x 51 :y 51})])))
-        (should= sut/state (-> sut/state (h/->next [(assoc valid-event :position {:x -1 :y -1})])))
-        (should= sut/state (-> sut/state (h/->next [(assoc valid-event :position {:x 25 :y 51})])))
-        (should= sut/state (-> sut/state (h/->next [(assoc valid-event :position {:x 25 :y -1})])))))))
+        (should= sut/state (-> sut/state (->next [(assoc valid-event :button 3)])))
+        (should= sut/state (-> sut/state (->next [(assoc valid-event :type :mouse-dragged)])))
+        (should= sut/state (-> sut/state (->next [(assoc valid-event :position {:x 51 :y 51})])))
+        (should= sut/state (-> sut/state (->next [(assoc valid-event :position {:x -1 :y -1})])))
+        (should= sut/state (-> sut/state (->next [(assoc valid-event :position {:x 25 :y 51})])))
+        (should= sut/state (-> sut/state (->next [(assoc valid-event :position {:x 25 :y -1})])))))))

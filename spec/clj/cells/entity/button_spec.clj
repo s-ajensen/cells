@@ -2,12 +2,22 @@
   (:require [c3kit.apron.corec :as ccc]
             [cells.entity.button :as sut]
             [cells.spec-helper :as h]
+            [cells.middleware.transform :refer [->TransformMiddleware]]
+            [cells.middleware.script :refer [->ScriptMiddleware]]
+            [cells.middleware.event-poll :refer [->EventPollMiddleware]]
+            [cells.middleware.event :refer [->EventMiddleware]]
             [speclj.core :refer :all]))
 
 (defn first-entity [entities]
   (second (first entities)))
 
 (def state :undefined)
+
+(defn ->next [state events]
+  (h/->next state events [(->TransformMiddleware)
+                          (->ScriptMiddleware)
+                          (->EventPollMiddleware (h/->WindowPoller events))
+                          (->EventMiddleware)]))
 
 (describe "Button Entity"
   (with-stubs)
@@ -37,22 +47,22 @@
 
     (it "updates state when triggering listener callback"
       (let [event {:type :mouse-pressed :button 1 :position {:x 2 :y 10}}]
-        (should= {:event-queue [] :my :state} (h/->next @state [event]))))
+        (should= {:event-queue [] :my :state} (->next @state [event]))))
 
     (context "doesn't update state when listener not triggered"
 
       (it "to the left of button"
         (let [event {:type :mouse-pressed :button 1 :position {:x 1 :y 10}}]
-          (should= @state (h/->next @state [event]))))
+          (should= @state (->next @state [event]))))
 
       (it "to the right of button"
         (let [event {:type :mouse-pressed :button 1 :position {:x 23 :y 10}}]
-          (should= @state (h/->next @state [event]))))
+          (should= @state (->next @state [event]))))
 
       (it "above button"
         (let [event {:type :mouse-pressed :button 1 :position {:x 2 :y 9}}]
-          (should= @state (h/->next @state [event]))))
+          (should= @state (->next @state [event]))))
 
       (it "below button"
         (let [event {:type :mouse-pressed :button 1 :position {:x 2 :y 26}}]
-          (should= @state (h/->next @state [event])))))))
+          (should= @state (->next @state [event])))))))
