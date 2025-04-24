@@ -1,8 +1,6 @@
 (ns cells.entity.window-spec
   (:require [cells.entity.window :as sut]
             [cells.spec-helper :as h]
-            [cells.middleware.transform :refer [->TransformMiddleware]]
-            [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
             [speclj.core :refer :all]))
@@ -11,9 +9,7 @@
             :entities (sut/add-listeners {})})
 
 (defn ->next [state events]
-  (h/->next state events [(->TransformMiddleware)
-                          (->ScriptMiddleware)
-                          (->EventPollMiddleware (h/->WindowPoller events))
+  (h/->next state events [(->EventPollMiddleware (h/->WindowPoller events))
                           (->EventMiddleware)]))
 
 (describe "window state"

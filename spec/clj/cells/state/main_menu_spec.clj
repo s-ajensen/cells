@@ -2,17 +2,13 @@
   (:require [cells.entity.window :as window]
             [cells.spec-helper :as h]
             [cells.state.orbs :as orbs]
-            [cells.middleware.transform :refer [->TransformMiddleware]]
-            [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
             [speclj.core :refer :all]
             [cells.state.main-menu :as sut]))
 
 (defn ->next [state events]
-  (h/->next state events [(->TransformMiddleware)
-                          (->ScriptMiddleware)
-                          (->EventPollMiddleware (h/->WindowPoller events))
+  (h/->next state events [(->EventPollMiddleware (h/->WindowPoller events))
                           (->EventMiddleware)]))
 
 (describe "Main Menu State"
