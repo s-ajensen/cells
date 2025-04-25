@@ -23,7 +23,8 @@
   (render/init! window)
   (let [window {:renderer     (render/->C2DRenderer window)
                 :event-poller (render/->C2DPoller window)}
-        engine (CellEngine. window [(->attract-middleware)
+        engine (CellEngine. window [;; TODO - window middleware. don't couple to main_menu.clj
+                                    (->attract-middleware)
                                     (->TransformMiddleware)
                                     (->ScriptMiddleware)
                                     (->EventPollMiddleware (:event-poller window))
