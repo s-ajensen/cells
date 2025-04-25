@@ -13,5 +13,6 @@
 
 (deftype ScriptMiddleware []
   cask/Steppable
+  (setup [_this state] state)
   (next-state [_this {:keys [entities] :as state}]
     (reduce apply-scripts state entities)))

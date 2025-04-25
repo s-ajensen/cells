@@ -33,6 +33,7 @@
 
 (deftype EventMiddleware []
   cask/Steppable
+  (setup [_this state] state)
   (next-state [_this {:keys [event-queue] :as state}]
     (reduce trigger-event state event-queue)))
 

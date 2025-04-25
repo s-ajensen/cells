@@ -1,6 +1,7 @@
 (ns cells.middleware.attract
   (:require [c3kit.apron.corec :as ccc]
             [cask.core :as cask]
+            [cells.entity.core :as entity]
             [clojure.math.combinatorics :as combo]))
 
 (defn- sqr [n] (* n n))
@@ -35,7 +36,51 @@
           (update-in entities [id :transform :position] add delta)))
       entities deltas)))
 
-(deftype AttractMiddleware [spec]
+(deftype AttractMiddleware [spec entities]
   cask/Steppable
+  (setup [_this state] (update state :entities merge entities))
   (next-state [_this state]
     (update state :entities (partial attract-entities spec))))
+
+(def red {:r 255 :g 0 :b 0 :a 255})
+(def green {:r 0 :g 255 :b 0 :a 255})
+(def blue {:r 0 :g 0 :b 255 :a 255})
+
+(defn ->entities [n]
+  (reduce (fn [entities _]
+            (let [color (rand-nth [red green blue])
+                  position {:x (+ 100 (rand-int 400)) :y (+ 100 (rand-int 400))}]
+              (entity/add-entity entities {:kind      :cell
+                                           :render?   true
+                                           :transform {:position position}
+                                           :color     color})))
+          {}
+          (range n)))
+
+(def entities
+  (-> (entity/add-entity {} {:kind      :cell
+                             :render?   true
+                             :transform {:position {:x 300 :y 200}}
+                             :color     red})
+      (entity/add-entity {:kind      :cell
+                          :render?   true
+                          :transform {:position {:x 200 :y 200}}
+                          :color     green})
+      (entity/add-entity {:kind      :cell
+                          :render?   true
+                          :transform {:position {:x 250 :y 312}}
+                          :color     blue})
+      (merge (->entities 30))))
+
+(defn ->attract-middleware []
+  (->AttractMiddleware {:attractions
+                        {[green green] (fn [_attractor _attracted] 0.5)
+                         [blue blue] (fn [_attractor _attracted] -0.5)
+                         [red red] (fn [_attractor _attracted] -0.5)
+                         [green red] (fn [_attractor _attracted] 0.5)
+                         [red green] (fn [_attractor _attracted] -0.5)
+                         [red blue] (fn [_attractor _attracted] 0.5)
+                         [blue red] (fn [_attractor _attracted] -0.5)
+                         [blue green] (fn [_attractor _attracted] 0.5)
+                         [green blue] (fn [_attractor _attracted] -0.5)}}
+                       entities))

@@ -7,5 +7,6 @@
 
 (deftype EventPollMiddleware [pollable]
   cask/Steppable
+  (setup [_this state] state)
   (next-state [_this state]
     (reduce event/enqueue-event state (poll-events pollable state))))

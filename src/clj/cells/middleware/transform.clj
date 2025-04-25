@@ -8,5 +8,6 @@
 
 (deftype TransformMiddleware []
   cask/Steppable
+  (setup [_this state] state)
   (next-state [_this state]
     (update state :entities #(update-vals % update-transform))))
