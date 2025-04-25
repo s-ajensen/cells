@@ -21,8 +21,8 @@
 
 (deftype WindowRenderer []
   cask/Renderable
-  (render [_this _state]
-    ((stub :render))))
+  (render [_this state]
+    ((stub :render) state)))
 
 (deftype WindowPoller [events]
   poll/Pollable
