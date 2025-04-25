@@ -1,6 +1,7 @@
-(ns cells.entity.window
+(ns cells.middleware.window
   (:require [cells.entity.core :as entity]
-            [cells.trigger :as trigger]))
+            [cells.trigger :as trigger]
+            [cask.core :as cask]))
 
 (def w 800)
 (def h 600)
@@ -21,3 +22,8 @@
 
 (defn add-listeners [entities]
   (entity/add-entity entities listener))
+
+(deftype WindowMiddleware []
+  cask/Steppable
+  (setup [_this state] (update state :entities add-listeners))
+  (next-state [_this state] state))

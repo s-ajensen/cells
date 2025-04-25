@@ -1,6 +1,6 @@
 (ns cells.state.main-menu
   (:require [cells.entity.button :as button]
-            [cells.entity.window :as window]
+            [cells.middleware.window :as window]
             [cells.state.orbs :as orbs]))
 
 (def orb-button

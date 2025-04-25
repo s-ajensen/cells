@@ -1,5 +1,5 @@
 (ns cells.state.main-menu-spec
-  (:require [cells.entity.window :as window]
+  (:require [cells.middleware.window :as window]
             [cells.spec-helper :as h]
             [cells.state.orbs :as orbs]
             [cells.middleware.event-poll :refer [->EventPollMiddleware]]
