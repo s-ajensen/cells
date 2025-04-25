@@ -8,6 +8,7 @@
     :* (trigger state entity event)))
 
 ;; TODO - refactor with script/apply-scripts
+;; TODO - ^ actually, don't do this. I think we decided that scripts/listeners should only have :self scope
 (defn apply-listeners
   ([event state [_id {:keys [listeners] :as entity}]]
    (apply-listeners event state listeners entity))
