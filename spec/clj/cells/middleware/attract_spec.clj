@@ -16,7 +16,7 @@
                        (entity/add-entity {:kind :not-cell})
                        (entity/add-entity {:kind :also-not-cell}))
           state {:entities entities}]
-      (should= state (-> (sut/->AttractMiddleware {})
+      (should= state (-> (sut/->AttractMiddleware {} nil)
                          (cask/next-state state)))))
 
   (context "moves cells"
@@ -37,7 +37,7 @@
             state {:entities
                    {attracted-id attracted
                     static-id    static}}
-            result (-> (sut/->AttractMiddleware spec)
+            result (-> (sut/->AttractMiddleware spec nil)
                        (cask/next-state state)
                        :entities)]
         (should= {:x 9.0 :y 0.0} (-> (get result attracted-id) :transform :position))
