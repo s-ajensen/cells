@@ -2,7 +2,7 @@
   (:require [c3kit.apron.corec :as ccc]
             [cells.entity.button :as sut]
             [cells.spec-helper :as h]
-            [cells.middleware.event-poll :refer [->EventPollMiddleware]]
+            [cells.middleware.window :refer [->WindowMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
             [speclj.core :refer :all]))
 
@@ -12,8 +12,8 @@
 (def state :undefined)
 
 (defn ->next [state events]
-  (h/->next state events [(->EventPollMiddleware (h/->WindowPoller events))
-                          (->EventMiddleware)]))
+  (h/->next state [(->WindowMiddleware (h/->window-spec events))
+                   (->EventMiddleware)]))
 
 (describe "Button Entity"
   (with-stubs)

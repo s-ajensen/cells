@@ -34,16 +34,11 @@
    :renderer (->WindowRenderer)
    :event-poller (->WindowPoller window-events)})
 
-(defn ->engine
-  ([middlewares]
-   (->engine [] middlewares))
-  ([window-events middlewares]
-  (CellEngine. (->window-spec window-events) middlewares)))
+(defn ->engine [middlewares]
+  (CellEngine. middlewares))
 
-(defn ->next
-  ([state middlewares] (->next state [] middlewares))
-  ([state window-events middlewares]
-   (cask/next-state (->engine window-events middlewares) state)))
+(defn ->next [state middlewares]
+  (cask/next-state (->engine middlewares) state))
 
 (defn find-entity [state label]
   (ccc/ffilter #(= label (:label %)) (vals (:entities state))))

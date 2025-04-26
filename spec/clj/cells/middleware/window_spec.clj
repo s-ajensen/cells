@@ -7,13 +7,13 @@
             [speclj.core :refer :all]))
 
 (defn ->tested-engine [events]
-  (h/->engine events [(sut/->WindowMiddleware (h/->window-spec events))
-                      (->ScriptMiddleware)
-                      (->EventMiddleware)]))
+  (h/->engine [(sut/->WindowMiddleware (h/->window-spec events))
+               (->ScriptMiddleware)
+               (->EventMiddleware)]))
 
-(defn ->engine [events]
-  (h/->engine events [(->ScriptMiddleware)
-                      (->EventMiddleware)]))
+(defn ->engine []
+  (h/->engine [(->ScriptMiddleware)
+               (->EventMiddleware)]))
 
 (defn ->tested-setup [state events]
   (cask/setup (->tested-engine events) state))
@@ -21,8 +21,8 @@
 (defn ->tested-next [state events]
   (cask/next-state (->tested-engine events) state))
 
-(defn ->next [state events]
-  (cask/next-state (->engine events) state))
+(defn ->next [state]
+  (cask/next-state (->engine) state))
 
 (def state :undefined)
 
@@ -47,24 +47,24 @@
 
   (it "doesn't halt state on not window close"
     (let [event {:type :something-else}]
-      (should= (->next @state [event]) (->tested-next @state [event]))))
+      (should= (->next @state) (->tested-next @state [event]))))
 
   (it "prints on left-click"
     (let [event {:type :mouse-pressed :button 1 :position {:x 100 :y 100}}]
-      (should= (->next @state [event]) (->tested-next @state [event]))
+      (should= (->next @state) (->tested-next @state [event]))
       (should-have-invoked :prn {:with ["left"]})))
 
   (it "doesn't print on non left-click"
     (let [event {:type :mouse-pressed :button 3 :position {:x 100 :y 100}}]
-      (should= (->next @state [event]) (->tested-next @state [event]))
+      (should= (->next @state) (->tested-next @state [event]))
       (should-not-have-invoked :prn {:with ["left"]})))
 
   (it "prints on right-click"
     (let [event {:type :mouse-pressed :button 3 :position {:x 100 :y 100}}]
-      (should= (->next @state [event]) (->tested-next @state [event]))
+      (should= (->next @state) (->tested-next @state [event]))
       (should-have-invoked :prn {:with ["right"]})))
 
   (it "doesn't print on non right-click"
     (let [event {:type :mouse-pressed :button 1 :position {:x 100 :y 100}}]
-      (should= (->next @state [event]) (->tested-next @state [event]))
+      (should= (->next @state) (->tested-next @state [event]))
       (should-not-have-invoked :prn {:with ["right"]}))))
