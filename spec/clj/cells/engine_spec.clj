@@ -70,9 +70,9 @@
                                                          (->MultiplicativeMiddleware)]) 1))))
 
   (it "renders state with window"
-    (cask/render (sut/->CellEngine (h/->window []) []) :state)
+    (cask/render (sut/->CellEngine (h/->window-spec []) []) :state)
     (should-have-invoked :render {:with [:state]})
-    (cask/render (sut/->CellEngine (h/->window []) []) :other-state)
+    (cask/render (sut/->CellEngine (h/->window-spec []) []) :other-state)
     (should-have-invoked :render {:with [:other-state]}))
 
   )

@@ -24,7 +24,10 @@
 (defn add-listeners [entities]
   (entity/add-entity entities listener))
 
-(deftype WindowMiddleware [window]
+(deftype WindowMiddleware [window-spec]
   cask/Steppable
-  (setup [_this state] (update state :entities add-listeners))
-  (next-state [_this state] (cask/next-state (->EventPollMiddleware (:event-poller window)) state)))
+  (setup [_this state]
+    ((:init-fn! window-spec))
+    (update state :entities add-listeners))
+  (next-state [_this state]
+    (cask/next-state (->EventPollMiddleware (:event-poller window-spec)) state)))

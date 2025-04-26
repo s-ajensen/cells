@@ -20,13 +20,13 @@
                }))
 
 (defn -main [& args]
-  (render/init! window)
-  (let [window {:renderer     (render/->C2DRenderer window)
-                :event-poller (render/->C2DPoller window)}
-        engine (CellEngine. window [;; TODO - fix attract-middleware
+  (let [window-spec {:init-fn!     #(render/init! window)
+                     :renderer     (render/->C2DRenderer window)
+                     :event-poller (render/->C2DPoller window)}
+        engine (CellEngine. window-spec [;; TODO - fix attract-middleware
                                     ;(->attract-middleware)
                                     (->TransformMiddleware)
-                                    (->WindowMiddleware window)
+                                    (->WindowMiddleware window-spec)
                                     (->ScriptMiddleware)
                                     (->EventMiddleware)])]
     (cask/game-loop engine 17)))

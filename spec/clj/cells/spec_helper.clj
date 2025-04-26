@@ -29,15 +29,16 @@
   (poll-events [_this _state]
     events))
 
-(defn ->window [window-events]
-  {:renderer (->WindowRenderer)
+(defn ->window-spec [window-events]
+  {:init-fn! (stub :window-init)
+   :renderer (->WindowRenderer)
    :event-poller (->WindowPoller window-events)})
 
 (defn ->engine
   ([middlewares]
    (->engine [] middlewares))
   ([window-events middlewares]
-  (CellEngine. (->window window-events) middlewares)))
+  (CellEngine. (->window-spec window-events) middlewares)))
 
 (defn ->next
   ([state middlewares] (->next state [] middlewares))
