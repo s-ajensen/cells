@@ -27,6 +27,11 @@
 (defn- halt-or-dequeue [state]
   (or (maybe-halt state) (update state :event-queue rest)))
 
+(defn- maybe-dissoc-queue [state]
+  (if (and (not (keyword? state)) (empty? (:event-queue state)))
+    (dissoc state :event-queue)
+    state))
+
 (defn trigger-event [{:keys [entities] :as state} event]
   (let [apply-listeners (partial apply-listeners event)]
     (-> (reduce apply-listeners state entities)
@@ -36,7 +41,7 @@
   cask/Steppable
   (setup [_this state] state)
   (next-state [_this {:keys [event-queue] :as state}]
-    (reduce trigger-event state event-queue)))
+    (maybe-dissoc-queue (reduce trigger-event state event-queue))))
 
 (defn enqueue-event [state event]
   (if-not (:event-queue state)

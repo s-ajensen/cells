@@ -29,7 +29,7 @@
                      :trigger (fn [self event] (= event :my-event))
                      :next-state local-inc})
 
-(def state {:counter 0 :event-queue [] :entities (-> {} (entity/add-entity {:listeners [inc-listener]}))})
+(def state {:counter 0 :entities (-> {} (entity/add-entity {:listeners [inc-listener]}))})
 
 (defn ->state [entities events]
   (assoc state :event-queue events
@@ -86,8 +86,8 @@
              (:counter (cask/next-state (sut/->EventMiddleware) (with-events state [:unknown-event])))))
 
   (it "removes events after triggering"
-    (should= [] (:event-queue (cask/next-state (sut/->EventMiddleware) (with-events state [:my-event]))))
-    (should= [] (:event-queue (cask/next-state (sut/->EventMiddleware) (with-events state [:my-event :other-event])))))
+    (should-be-nil (:event-queue (cask/next-state (sut/->EventMiddleware) (with-events state [:my-event]))))
+    (should-be-nil (:event-queue (cask/next-state (sut/->EventMiddleware) (with-events state [:my-event :other-event])))))
 
   (it "halt persists through event triggers"
     (let [state (->state [{:listeners [inc-listener halt-listener]}] [:halt-event :my-event])]

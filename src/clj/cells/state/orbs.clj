@@ -8,8 +8,7 @@
       (assoc-in [:velocity :y] (* 2 (Math/sin (* 0.1 tick))))))
 
 (def state
-  {:event-queue []
-   :entities
+  {:entities
    (-> {}
        (window/add-listeners)
        (entity/add-entity

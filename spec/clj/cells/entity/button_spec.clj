@@ -36,14 +36,13 @@
 
   (context "listeners"
 
-    (with state {:event-queue []
-                 :entities
+    (with state {:entities
                  (sut/add {} {:transform {:position {:x 2 :y 10} :size {:x 20 :y 15}}
                               :global-callback (constantly {:my :state})})})
 
     (it "updates state when triggering listener callback"
       (let [event {:type :mouse-pressed :button 1 :position {:x 2 :y 10}}]
-        (should= {:event-queue [] :my :state} (->next @state [event]))))
+        (should= {:my :state} (->next @state [event]))))
 
     (context "doesn't update state when listener not triggered"
 

@@ -10,8 +10,7 @@
    :global-callback (constantly orbs/state)})
 
 (def state
-  {:event-queue []
-   :entities
+  {:entities
    (-> {}
        (window/add-listeners)
        (button/add orb-button))})
