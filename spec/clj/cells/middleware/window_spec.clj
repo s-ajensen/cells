@@ -2,20 +2,17 @@
   (:require [cask.core :as cask]
             [cells.middleware.window :as sut]
             [cells.spec-helper :as h]
-            [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
             [cells.middleware.script :refer [->ScriptMiddleware]]
             [speclj.core :refer :all]))
 
 (defn ->tested-engine [events]
-  (h/->engine events [(sut/->WindowMiddleware)
+  (h/->engine events [(sut/->WindowMiddleware (h/->window events))
                       (->ScriptMiddleware)
-                      (->EventPollMiddleware (h/->WindowPoller events))
                       (->EventMiddleware)]))
 
 (defn ->engine [events]
   (h/->engine events [(->ScriptMiddleware)
-                      (->EventPollMiddleware (h/->WindowPoller events))
                       (->EventMiddleware)]))
 
 (defn ->tested-setup [state events]
@@ -33,6 +30,9 @@
   (with-stubs)
 
   (redefs-around [prn (stub :prn)])
+
+  #_(it "initializes window on setup"
+    (should-have-invoked :render/init! {:with []}))
 
   (it "exists"
     (let [base-listeners (h/find-entity state "base-listeners")]

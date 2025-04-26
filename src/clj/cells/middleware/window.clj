@@ -1,6 +1,7 @@
 (ns cells.middleware.window
   (:require [cells.entity.core :as entity]
             [cells.trigger :as trigger]
+            [cells.middleware.event-poll :refer [->EventPollMiddleware]]
             [cask.core :as cask]))
 
 (def w 800)
@@ -23,7 +24,7 @@
 (defn add-listeners [entities]
   (entity/add-entity entities listener))
 
-(deftype WindowMiddleware []
+(deftype WindowMiddleware [window]
   cask/Steppable
   (setup [_this state] (update state :entities add-listeners))
-  (next-state [_this state] state))
+  (next-state [_this state] (cask/next-state (->EventPollMiddleware (:event-poller window)) state)))
