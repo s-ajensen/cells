@@ -28,6 +28,7 @@
   cask/Steppable
   (setup [_this state]
     ((:init-fn! window-spec))
-    (update state :entities add-listeners))
+    (-> (update state :entities add-listeners)
+        (assoc :renderer (:renderer window-spec))))
   (next-state [_this state]
     (cask/next-state (->EventPollMiddleware (:event-poller window-spec)) state)))

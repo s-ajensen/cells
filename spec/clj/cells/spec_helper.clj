@@ -24,6 +24,8 @@
   (render [_this state]
     ((stub :render) state)))
 
+(def window-renderer (->WindowRenderer))
+
 (deftype WindowPoller [events]
   poll/Pollable
   (poll-events [_this _state]
@@ -31,7 +33,7 @@
 
 (defn ->window-spec [window-events]
   {:init-fn! (stub :window-init)
-   :renderer (->WindowRenderer)
+   :renderer window-renderer
    :event-poller (->WindowPoller window-events)})
 
 (defn ->engine [middlewares]

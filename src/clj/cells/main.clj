@@ -1,32 +1,18 @@
 (ns cells.main
   (:require [cask.core :as cask]
-            [cells.render :as render]
-            [cells.middleware.window :as window]
-            [clojure2d.core :as c2d]
             [cells.middleware.transform :refer [->TransformMiddleware]]
             [cells.middleware.attract :refer [->attract-middleware]]
             [cells.middleware.script :refer [->ScriptMiddleware]]
             [cells.middleware.event :refer [->EventMiddleware]]
-            [cells.middleware.window :refer [->WindowMiddleware]])
+            [cells.middleware.window :refer [->WindowMiddleware]]
+            [cells.c2d :refer [C2D-window-spec]])
   (:import (cells.engine CellEngine)))
 
-
-(def window (c2d/show-window
-              {:canvas      (c2d/canvas window/w window/h)
-               :window-name "Game Window"
-               :w           window/w
-               :h           window/h
-               :refresher   :onrepaint
-               }))
-
 (defn -main [& args]
-  (let [window-spec {:init-fn!     #(render/init! window)
-                     :renderer     (render/->C2DRenderer window)
-                     :event-poller (render/->C2DPoller window)}
-        engine (CellEngine. [;; TODO - fix attract-middleware
+  (let [engine (CellEngine. [;; TODO - fix attract-middleware
                              ;(->attract-middleware)
                              (->TransformMiddleware)
-                             (->WindowMiddleware window-spec)
+                             (->WindowMiddleware C2D-window-spec)
                              (->ScriptMiddleware)
                              (->EventMiddleware)])]
     (cask/game-loop engine 17)))

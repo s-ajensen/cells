@@ -26,7 +26,7 @@
 
 (def state :undefined)
 
-(describe "window state"
+(describe "window middleware"
   (with-stubs)
 
   (with state (->tested-setup {} []))
@@ -41,6 +41,9 @@
     (let [base-listeners (h/find-entity @state "base-listeners")]
       (should base-listeners)
       (should= :headless-listener (:kind base-listeners))))
+
+  (it "adds renderer to state"
+    (should= h/window-renderer (:renderer @state)))
 
   (it "halts state on window close"
     (should= :halt (->tested-next @state [{:type :window-close}])))
