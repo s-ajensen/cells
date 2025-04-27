@@ -9,10 +9,10 @@
             [cells.c2d :as c2d]))
 
 (defn -main [& args]
-  (let [engine (->CellEngine [;; TODO - fix attract-middleware
-                              ;(->attract-middleware)
+  (let [engine (->CellEngine [(->attract-middleware)
                               (->TransformMiddleware)
                               (->WindowMiddleware @c2d/window-spec)
                               (->ScriptMiddleware)
                               (->EventMiddleware)])]
-    (cask/game-loop engine 17)))
+    (cask/game-loop engine 17)
+    (System/exit 0)))

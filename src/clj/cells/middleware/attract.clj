@@ -40,7 +40,9 @@
   cask/Steppable
   (setup [_this state] (update state :entities merge entities))
   (next-state [_this state]
-    (update state :entities (partial attract-entities spec))))
+    (let [entities (:entities state)
+          cells (entity/select-kind entities :cell)]
+      (assoc state :entities (merge entities (attract-entities spec cells))))))
 
 (def red {:r 255 :g 0 :b 0 :a 255})
 (def green {:r 0 :g 255 :b 0 :a 255})
