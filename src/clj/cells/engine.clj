@@ -1,15 +1,13 @@
 (ns cells.engine
-  (:require [cask.core :as cask]))
-
-(defn reduce-middlewares [f state middlewares]
-  (reduce (fn [state middleware] (f middleware state)) state middlewares))
+  (:require [cask.core :as cask]
+            [cells.state.core :as state]))
 
 (deftype CellEngine [middlewares]
   cask/Steppable
   (setup [_this state]
-    (reduce-middlewares cask/setup state middlewares))
+    (state/reduce-setup state middlewares))
   (next-state [_this state]
-    (reduce-middlewares cask/next-state state middlewares))
+    (state/reduce-next-state state middlewares))
   cask/Renderable
   (render [_this state]
     (cask/render (:renderer state) state)))
