@@ -1,6 +1,6 @@
-(ns cells.render-spec
+(ns cells.c2d-spec
   (:require [cells.entity.core :as entity]
-            [cells.render :as sut]
+            [cells.c2d :as sut]
             [cells.spec-helper :as spec-helper]
             [clojure2d.core :as c2d]
             [speclj.core :refer :all]))
