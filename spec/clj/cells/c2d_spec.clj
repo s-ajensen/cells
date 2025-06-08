@@ -1,8 +1,8 @@
 (ns cells.c2d-spec
   (:require [cells.entity.core :as entity]
-            [cells.c2d :as sut]
             [cells.spec-helper :as spec-helper]
-            [clojure2d.core :as c2d]
+            [cells.c2d :as sut]
+            [clojure2d.core :as c2d] ; for some reason just requiring clojure2d opens a "window"
             [speclj.core :refer :all]))
 
 (def cell-state
